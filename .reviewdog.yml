@@ -1,0 +1,4 @@
+runners:
+  flake8:
+    cmd: flake8 ./ --ignore=E501
+    errorformat: "%f:%l:%c: %m"
