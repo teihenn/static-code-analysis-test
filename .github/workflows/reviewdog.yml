@@ -1,0 +1,20 @@
+name: reviewdog
+on: [pull_request]
+jobs:
+  reviewdog:
+    name: runner / flake8
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: pip install flake8
+    - name: reviewdog
+      uses: reviewdog/action-flake8@v1
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        reporter: github-pr-review # GitHub pull request review reporter
