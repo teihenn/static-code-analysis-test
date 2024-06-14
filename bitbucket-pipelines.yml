@@ -13,7 +13,7 @@ pipelines:
           - echo ${BITBUCKET_BRANCH}
           - echo ${BITBUCKET_PR_DESTINATION_BRANCH}
           - export BITBUCKET_PR_DESTINATION_BRANCH=main
-          - git clone https://teihenn-admin@bitbucket.org/teihenn/static-code-analysis-test.git
+          - git clone git@bitbucket.org:teihenn/static-code-analysis-test.git
           - git fetch origin ${BITBUCKET_BRANCH} ${BITBUCKET_PR_DESTINATION_BRANCH}
           - git checkout ${BITBUCKET_PR_DESTINATION_BRANCH}
           - git checkout ${BITBUCKET_BRANCH}
