@@ -1,0 +1,20 @@
+image: python:3.8
+
+pipelines:
+  default:
+    - step:
+        name: "Reviewdog"
+        script:
+          - export REVIEWDOG_VERSION=v0.17.5
+          - pip install flake8
+          - wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh |
+              sh -s -- -b /tmp "${REVIEWDOG_VERSION}"
+          - /tmp/reviewdog -version
+          - echo ${BITBUCKET_BRANCH}
+          - echo ${BITBUCKET_PR_DESTINATION_BRANCH}
+          - export BITBUCKET_PR_DESTINATION_BRANCH=main
+          - git clone git@bitbucket.org:teihenn/static-code-analysis-test.git
+          - git fetch origin ${BITBUCKET_BRANCH} ${BITBUCKET_PR_DESTINATION_BRANCH}
+          - git checkout ${BITBUCKET_PR_DESTINATION_BRANCH}
+          - git checkout ${BITBUCKET_BRANCH}
+          - git diff --name-only ${BITBUCKET_PR_DESTINATION_BRANCH} ${BITBUCKET_BRANCH} -- '*.py' | xargs -r flake8 | /tmp/reviewdog -f=flake8 -name="flake8" -reporter=bitbucket-code-report
